@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantCrush - Landing</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .landing-container {
+            background: #111111;
+            border: 1px solid #333333;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0, 123, 255, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            margin: 80px auto;
+        }
+        .landing-title {
+            color: #00aaff;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
+        }
+        .landing-subtitle {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 400;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(0, 170, 255, 0.1);
+        }
+        .mode-btn {
+            display: block;
+            width: 100%;
+            margin: 20px 0;
+            padding: 25px 0;
+            font-size: 1.5em;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(45deg, #00aaff, #0088cc);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mode-btn:hover {
+            background: linear-gradient(45deg, #0088cc, #00aaff);
+            box-shadow: 0 0 30px rgba(0, 170, 255, 0.4);
+        }
+        .contact-info {
+            margin-top: 30px;
+            color: #aaa;
+            font-size: 1em;
+            text-align: center;
+        }
+        .contact-info a {
+            color: #00aaff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-container">
+        <div class="landing-title">QuantCrush</div>
+        <div class="landing-subtitle">The Mental Math Game</div>
+        <button class="mode-btn" onclick="window.location.href='basic.html'">Basic Mode</button>
+        <button class="mode-btn" onclick="alert('Advanced Mode coming soon!')">Advanced Mode</button>
+        <div class="contact-info">If you have any questions email <a href="mailto:quantcrush@gmail.com">quantcrush@gmail.com</a></div>
+    </div>
+</body>
+</html> 
