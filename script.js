@@ -12,6 +12,7 @@
             totalQuestions: 0,
             questionTimes: [],
             includeDecimals: false,
+            gameActive: false // Add this flag
         };
 
         // Setup event listeners
@@ -119,6 +120,7 @@
             gameState.totalQuestions = 0;
             gameState.questionTimes = [];
             gameState.startTime = Date.now();
+            gameState.gameActive = true; // Set active
 
             document.querySelector('.setup-screen').classList.remove('active');
             document.querySelector('.game-screen').classList.add('active');
@@ -237,6 +239,8 @@
         }
 
         function endGame() {
+            if (!gameState.gameActive) return; // Only show results if game is active
+            gameState.gameActive = false;
             clearInterval(gameState.gameTimer);
             
             document.querySelector('.game-screen').classList.remove('active');

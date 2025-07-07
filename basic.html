@@ -117,8 +117,10 @@
                 if (window.gameState && window.gameState.gameTimer) {
                     clearInterval(window.gameState.gameTimer);
                     window.gameState.gameTimer = null;
+                    window.gameState.gameActive = false;
                 }
                 gameScreen.classList.remove('active');
+                resultsScreen.classList.remove('active'); // Always hide results screen
                 setupScreen.classList.add('active');
                 updateBackButtonText();
             }
