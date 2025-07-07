@@ -113,7 +113,11 @@
             if (setupScreen.classList.contains('active') || resultsScreen.classList.contains('active')) {
                 window.location.href = 'index.html';
             } else {
-                // Go back to setup screen
+                // Go back to setup screen - clear game state
+                if (window.gameState && window.gameState.gameTimer) {
+                    clearInterval(window.gameState.gameTimer);
+                    window.gameState.gameTimer = null;
+                }
                 gameScreen.classList.remove('active');
                 setupScreen.classList.add('active');
                 updateBackButtonText();
