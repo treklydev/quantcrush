@@ -55,6 +55,18 @@
             // Decimals checkbox
             document.getElementById('includeDecimals').addEventListener('change', function () {
                 gameState.includeDecimals = this.checked;
+                const parent = this.closest('.checkbox-item');
+                if (parent) {
+                    parent.classList.toggle('selected', this.checked);
+                }
+            });
+            // Make the entire decimals toggle box clickable
+            document.getElementById('decimalsToggle').addEventListener('click', function(e) {
+                // Prevent double toggling if the input itself was clicked
+                if (e.target.tagName.toLowerCase() === 'input') return;
+                const checkbox = this.querySelector('input');
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
             });
 
             // Initialize selections
