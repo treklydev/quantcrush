@@ -182,16 +182,19 @@
         .radio-item input[type="radio"] {
             display: none;
         }
-        /* Make the entire box clickable */
+        /* Mobile-friendly: Ensure touch events work */
         .checkbox-item,
         .radio-item {
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
         /* Optional: Make label take full width for easier clicking */
         .checkbox-item label,
         .radio-item label {
             cursor: pointer;
             width: 100%;
+            -webkit-tap-highlight-color: transparent;
         }
     </style>
 </body>

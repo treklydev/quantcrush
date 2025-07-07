@@ -67,6 +67,14 @@
                 gameState.includeDecimals = checkbox.checked;
                 this.classList.toggle('selected', checkbox.checked);
             });
+            // Mobile-friendly touch event for decimals toggle
+            document.getElementById('decimalsToggle').addEventListener('touchstart', function(e) {
+                e.preventDefault(); // Prevent default touch behavior
+                const checkbox = this.querySelector('input');
+                checkbox.checked = !checkbox.checked;
+                gameState.includeDecimals = checkbox.checked;
+                this.classList.toggle('selected', checkbox.checked);
+            });
 
             // Initialize selections
             updateOperations();
