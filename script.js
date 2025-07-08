@@ -18,6 +18,8 @@ let gameState = {
 
 let globalGameTimer = null;
 let gameSessionId = 0;
+let lastValidMin = 1;
+let lastValidMax = 12;
 
 // Setup event listeners
 document.addEventListener('DOMContentLoaded', function() {
@@ -43,6 +45,8 @@ function setupEventListeners() {
     // Question type checkboxes
     document.getElementById('minRange').addEventListener('input', updateNumberRange);
     document.getElementById('maxRange').addEventListener('input', updateNumberRange);
+    document.getElementById('minRange').addEventListener('blur', validateNumberRangeOnBlur);
+    document.getElementById('maxRange').addEventListener('blur', validateNumberRangeOnBlur);
 
     // Time radio buttons
     document.querySelectorAll('.radio-item[data-time]').forEach(item => {
@@ -96,17 +100,47 @@ function updateOperations() {
 }
 
 function updateNumberRange() {
-    const minValue = parseFloat(document.getElementById('minRange').value);
-    const maxValue = parseFloat(document.getElementById('maxRange').value);
-    
-    if (minValue >= maxValue) {
-        document.getElementById('maxRange').value = (minValue + 0.01).toFixed(2);
-        gameState.maxRange = minValue + 0.01;
-    } else {
-        gameState.maxRange = maxValue;
+    const minInput = document.getElementById('minRange');
+    const maxInput = document.getElementById('maxRange');
+    const minValue = minInput.value;
+    const maxValue = maxInput.value;
+
+    // If either input is empty, do not update gameState
+    if (minValue === '' || maxValue === '') {
+        return;
     }
-    
-    gameState.minRange = minValue;
+
+    const min = parseFloat(minValue);
+    const max = parseFloat(maxValue);
+
+    if (!isNaN(min)) lastValidMin = min;
+    if (!isNaN(max)) lastValidMax = max;
+
+    gameState.minRange = min;
+    gameState.maxRange = max;
+    validateStart();
+}
+
+function validateNumberRangeOnBlur(e) {
+    const minInput = document.getElementById('minRange');
+    const maxInput = document.getElementById('maxRange');
+    let min = parseFloat(minInput.value);
+    let max = parseFloat(maxInput.value);
+
+    if (minInput.value === '' || isNaN(min)) {
+        minInput.value = lastValidMin;
+        min = lastValidMin;
+    }
+    if (maxInput.value === '' || isNaN(max)) {
+        maxInput.value = lastValidMax;
+        max = lastValidMax;
+    }
+    if (min >= max) {
+        max = min + 0.01;
+        maxInput.value = max.toFixed(2);
+    }
+    gameState.minRange = min;
+    gameState.maxRange = max;
     validateStart();
 }
 
