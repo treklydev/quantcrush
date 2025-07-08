@@ -12,8 +12,12 @@ let gameState = {
     totalQuestions: 0,
     questionTimes: [],
     includeDecimals: false,
-    gameActive: false
+    gameActive: false,
+    sessionId: 0 // Added sessionId to gameState
 };
+
+let globalGameTimer = null;
+let gameSessionId = 0;
 
 // Setup event listeners
 document.addEventListener('DOMContentLoaded', function() {
@@ -113,16 +117,10 @@ function validateStart() {
 }
 
 function startGame() {
-    if (gameState.operations.length === 0 || gameState.minRange >= gameState.maxRange) return;
-    
-    // Stop any existing timer first
     stopGame();
-    
-    // Always hide results screen and show only game screen
     document.querySelector('.results-screen').classList.remove('active');
     document.querySelector('.setup-screen').classList.remove('active');
     document.querySelector('.game-screen').classList.add('active');
-    
     gameState.score = 0;
     gameState.timeLeft = gameState.timeLimit;
     gameState.correctAnswers = 0;
@@ -130,7 +128,6 @@ function startGame() {
     gameState.questionTimes = [];
     gameState.startTime = Date.now();
     gameState.gameActive = true;
-    
     generateNewQuestion();
     startTimer();
 }
@@ -150,12 +147,12 @@ function startTimer() {
             gameState.gameTimer = null;
             return;
         }
-        
         gameState.timeLeft--;
         updateTimerDisplay();
-        
         if (gameState.timeLeft <= 0) {
-            endGame();
+            if (gameState.gameActive) {
+                endGame();
+            }
         }
     }, 1000);
 }
@@ -260,14 +257,10 @@ function checkAnswer() {
 
 function endGame() {
     if (!gameState.gameActive) return;
-    
     stopGame();
-    
-    // Always hide setup and game screens before showing results
     document.querySelector('.setup-screen').classList.remove('active');
     document.querySelector('.game-screen').classList.remove('active');
     document.querySelector('.results-screen').classList.add('active');
-    
     // Calculate avg time as timeLimit divided by correctAnswers
     let avgTime = 0;
     if (gameState.correctAnswers > 0) {
@@ -280,9 +273,8 @@ function endGame() {
 }
 
 function resetGame() {
-    // Stop any active game when going back to setup
     stopGame();
-    
     document.querySelector('.results-screen').classList.remove('active');
     document.querySelector('.game-screen').classList.remove('active');
     document.querySelector('.setup-screen').classList.add('active');
+}
