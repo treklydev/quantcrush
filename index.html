@@ -18,11 +18,11 @@
             margin: 80px auto;
         }
         .landing-title {
-            color: #00aaff;
+            color: #00cc66;
             margin-bottom: 10px;
             font-size: 2.5em;
             font-weight: 600;
-            text-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
+            text-shadow: 0 0 20px rgba(0, 204, 102, 0.3);
         }
         .landing-subtitle {
             color: #fff;
@@ -40,15 +40,15 @@
             font-weight: 600;
             border-radius: 12px;
             border: none;
-            background: linear-gradient(45deg, #00aaff, #0088cc);
+            background: linear-gradient(45deg, #00cc66, #00994d);
             color: #fff;
-            box-shadow: 0 0 20px rgba(0, 170, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 204, 102, 0.2);
             cursor: pointer;
             transition: all 0.2s;
         }
         .mode-btn:hover {
-            background: linear-gradient(45deg, #0088cc, #00aaff);
-            box-shadow: 0 0 30px rgba(0, 170, 255, 0.4);
+            background: linear-gradient(45deg, #00994d, #00cc66);
+            box-shadow: 0 0 30px rgba(0, 204, 102, 0.4);
         }
         .contact-info {
             margin-top: 30px;
@@ -57,17 +57,19 @@
             text-align: center;
         }
         .contact-info a {
-            color: #00aaff;
+            color: #00cc66;
             text-decoration: underline;
         }
+        .quant-white { color: #fff; }
+        .crush-green { color: #00cc66; }
     </style>
 </head>
 <body>
     <div class="landing-container">
-        <div class="landing-title">QuantCrush</div>
-        <div class="landing-subtitle">The Mental Math Game</div>
+        <div class="landing-title"><span class="quant-white">Quant</span><span class="crush-green">Crush</span></div>
+        <div class="landing-subtitle">Train Your Brain</div>
         <button class="mode-btn" onclick="window.location.href='basic.html'">Basic Mode</button>
-        <button class="mode-btn" onclick="alert('Advanced Mode coming soon!')">Advanced Mode</button>
+        <button class="mode-btn" onclick="window.location.href='advanced.html'">Advanced Mode</button>
         <div class="contact-info">If you have any questions email <a href="mailto:quantcrush@gmail.com">quantcrush@gmail.com</a></div>
     </div>
 </body>

@@ -8,106 +8,107 @@
 </head>
 <body>
     <div class="container">
-        <h1>QuantCrush</h1>
-        
-        <div class="setup-screen active">
-            <div class="option-group">
-                <h3>Select Operations:</h3>
-                <div class="checkbox-group operations-center">
-                    <div class="checkbox-item" data-operation="addition">
-                        <input type="checkbox" id="addition" checked>
-                        <label for="addition">Addition (+)</label>
+        <h1><span class="quant-white">Quant</span><span class="crush-green">Crush</span></h1>
+        <main class="main-content">
+            <!-- Main game content starts here -->
+            <div class="setup-screen active">
+                    <div class="option-group">
+                        <h3>Select Operations:</h3>
+                        <div class="checkbox-group operations-center">
+                            <div class="checkbox-item" data-operation="addition">
+                                <input type="checkbox" id="addition" checked>
+                                <label for="addition">Addition (+)</label>
+                            </div>
+                            <div class="checkbox-item" data-operation="subtraction">
+                                <input type="checkbox" id="subtraction">
+                                <label for="subtraction">Subtraction (-)</label>
+                            </div>
+                            <div class="checkbox-item" data-operation="multiplication">
+                                <input type="checkbox" id="multiplication">
+                                <label for="multiplication">Multiplication (×)</label>
+                            </div>
+                            <div class="checkbox-item" data-operation="division">
+                                <input type="checkbox" id="division">
+                                <label for="division">Division (÷)</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="checkbox-item" data-operation="subtraction">
-                        <input type="checkbox" id="subtraction">
-                        <label for="subtraction">Subtraction (-)</label>
-                    </div>
-                    <div class="checkbox-item" data-operation="multiplication">
-                        <input type="checkbox" id="multiplication">
-                        <label for="multiplication">Multiplication (×)</label>
-                    </div>
-                    <div class="checkbox-item" data-operation="division">
-                        <input type="checkbox" id="division">
-                        <label for="division">Division (÷)</label>
-                    </div>
-                </div>
-            </div>
 
-            <div class="option-group">
-                <h3>Number Range:</h3>
-                <div class="range-inputs">
-                    <div class="range-input-group">
-                        <label for="minRange">From:</label>
-                        <input type="number" id="minRange" value="2" min="1" max="1000" step="1">
+                    <div class="option-group">
+                        <h3>Number Range:</h3>
+                        <div class="range-inputs">
+                            <div class="range-input-group">
+                                <label for="minRange">From:</label>
+                                <input type="number" id="minRange" value="2" min="1" max="1000" step="1">
+                            </div>
+                            <div class="range-input-group">
+                                <label for="maxRange">To:</label>
+                                <input type="number" id="maxRange" value="100" min="1" max="1000" step="1">
+                            </div>
+                        </div>
+                        <div class="checkbox-group decimals-center">
+                            <div class="checkbox-item" id="decimalsToggle">
+                                <input type="checkbox" id="includeDecimals">
+                                <label>Use decimal numbers</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="range-input-group">
-                        <label for="maxRange">To:</label>
-                        <input type="number" id="maxRange" value="100" min="1" max="1000" step="1">
+                    <div class="option-group">
+                        <h3>Time Limit:</h3>
+                        <div class="radio-group">
+                            <div class="radio-item" data-time="30">
+                                <input type="radio" name="time" id="time30" value="30">
+                                <label for="time30">30s</label>
+                            </div>
+                            <div class="radio-item selected" data-time="60">
+                                <input type="radio" name="time" id="time60" value="60" checked>
+                                <label for="time60">1m</label>
+                            </div>
+                            <div class="radio-item" data-time="120">
+                                <input type="radio" name="time" id="time120" value="120">
+                                <label for="time120">2m</label>
+                            </div>
+                            <div class="radio-item" data-time="300">
+                                <input type="radio" name="time" id="time300" value="300">
+                                <label for="time300">5m</label>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="checkbox-group decimals-center">
-                    <div class="checkbox-item" id="decimalsToggle">
-                        <input type="checkbox" id="includeDecimals">
-                        <label>Use decimal numbers</label>
-                    </div>
-                </div>
-            </div>
-            <div class="option-group">
-                <h3>Time Limit:</h3>
-                <div class="radio-group">
-                    <div class="radio-item" data-time="30">
-                        <input type="radio" name="time" id="time30" value="30">
-                        <label for="time30">30s</label>
-                    </div>
-                    <div class="radio-item selected" data-time="60">
-                        <input type="radio" name="time" id="time60" value="60" checked>
-                        <label for="time60">1m</label>
-                    </div>
-                    <div class="radio-item" data-time="120">
-                        <input type="radio" name="time" id="time120" value="120">
-                        <label for="time120">2m</label>
-                    </div>
-                    <div class="radio-item" data-time="300">
-                        <input type="radio" name="time" id="time300" value="300">
-                        <label for="time300">5m</label>
-                    </div>
-                </div>
-            </div>
 
-            <button class="start-btn" onclick="startGame()">Start Challenge</button>
-        </div>
+                    <button class="start-btn" onclick="startGame()">Start Challenge</button>
+                </div>
 
-        <div class="game-screen">
-            <div class="game-header">
-                <div class="timer" id="timer">
-                    <div class="timer-circle" id="timerCircle">
-                        <div class="timer-inner" id="timerText">1:00</div>
+                <div class="game-screen">
+                    <div class="game-header">
+                        <div class="timer" id="timer">
+                            <div class="timer-circle" id="timerCircle">
+                                <div class="timer-inner" id="timerText">1:00</div>
+                            </div>
+                        </div>
+                        <div class="score">Score: <span id="score">0</span></div>
                     </div>
+                    <div class="question" id="question">2 + 3 = ?</div>
+                    <input type="number" class="answer-input" id="answerInput" placeholder="?" step="any">
                 </div>
-                <div class="score">Score: <span id="score">0</span></div>
-            </div>
-            <div class="question" id="question">2 + 3 = ?</div>
-            <input type="number" class="answer-input" id="answerInput" placeholder="?" step="any">
-        </div>
 
-        <div class="results-screen">
-            <h2>Challenge Complete!</h2>
-            <div class="final-score" id="finalScore">0</div>
-            <div class="stat-circles">
-                <div class="stat-circle">
-                    <div class="stat-label">Questions Answered</div>
-                    <div class="stat-value" id="correctCount">0</div>
+                <div class="results-screen">
+                    <h2>Challenge Complete!</h2>
+                    <div class="final-score" id="finalScore">0</div>
+                    <div class="stat-circles">
+                        <div class="stat-circle">
+                            <div class="stat-label">Questions Answered</div>
+                            <div class="stat-value" id="correctCount">0</div>
+                        </div>
+                        <div class="stat-circle">
+                            <div class="stat-label">Avg Time</div>
+                            <div class="stat-value" id="avgTime">0s</div>
+                        </div>
+                    </div>
+                    <button class="play-again-btn" onclick="resetGame()">Play Again</button>
                 </div>
-                <div class="stat-circle">
-                    <div class="stat-label">Avg Time</div>
-                    <div class="stat-value" id="avgTime">0s</div>
-                </div>
-            </div>
-            <button class="play-again-btn" onclick="resetGame()">Play Again</button>
-        </div>
-        <button class="back-btn" id="backBtn" onclick="handleBackButton()">Back to Home</button>
+                <button class="back-btn" id="backBtn" onclick="handleBackButton()">Back to Home</button>
+        </main>
     </div>
-
     <script src="script.js"></script>
     <script>
         function showSetupScreenOnly() {
@@ -166,9 +167,28 @@
         updateBackButtonText();
     </script>
     <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #2c2c2c;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+        }
+        .container {
+            background: #111111;
+            border: 1px solid #333333;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0, 123, 255, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
         .back-btn {
             margin-top: 30px;
-            background: linear-gradient(45deg, #333333, #00aaff);
+            background: linear-gradient(45deg, #00cc66, #00994d);
             color: #fff;
             border: none;
             padding: 12px 28px;
@@ -176,8 +196,8 @@
             font-size: 1.1em;
             font-weight: 500;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
-            transition: all 0.2s;
+            box-shadow: 0 0 20px rgba(0, 204, 102, 0.3);
+            transition: all 0.3s ease;
             display: block;
             width: 100%;
             max-width: 300px;
@@ -185,8 +205,9 @@
             margin-right: auto;
         }
         .back-btn:hover {
-            background: linear-gradient(45deg, #00aaff, #333333);
-            box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
+            background: linear-gradient(45deg, #00994d, #00cc66);
+            box-shadow: 0 0 30px rgba(0, 204, 102, 0.5);
+            transform: translateY(-2px);
         }
         .decimals-center {
             justify-content: center;
@@ -283,6 +304,8 @@
             color: #fff;
             text-shadow: 0 2px 12px rgba(0,170,255,0.18);
         }
+        .quant-white { color: #fff; }
+        .crush-green { color: #00cc66; }
     </style>
 </body>
 </html> 

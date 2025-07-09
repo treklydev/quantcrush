@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantCrush Advanced</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1><span class="quant-white">Quant</span><span class="crush-green">Crush</span></h1>
+        <main class="main-content">
+            <!-- Main game content starts here -->
+            <div class="setup-screen active">
+                <p style="color: #ccc; margin-bottom: 20px; font-size: 1em;">Set a time limit and answer as many applied questions as you can</p>
+                <div class="option-group">
+                    <h3>Time Limit:</h3>
+                    <div class="radio-group">
+                        <div class="radio-item" data-time="30">
+                            <input type="radio" name="time" id="time30" value="30">
+                            <label for="time30">30s</label>
+                        </div>
+                        <div class="radio-item selected" data-time="60">
+                            <input type="radio" name="time" id="time60" value="60" checked>
+                            <label for="time60">1m</label>
+                        </div>
+                        <div class="radio-item" data-time="120">
+                            <input type="radio" name="time" id="time120" value="120">
+                            <label for="time120">2m</label>
+                        </div>
+                        <div class="radio-item" data-time="300">
+                            <input type="radio" name="time" id="time300" value="300">
+                            <label for="time300">5m</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="start-btn" onclick="startAdvancedGame()">Start Challenge</button>
+            </div>
+
+            <div class="game-screen">
+                <div class="game-header">
+                    <div class="timer" id="timer">
+                        <div class="timer-circle" id="timerCircle">
+                            <div class="timer-inner" id="timerText">1:00</div>
+                        </div>
+                    </div>
+                    <div class="score">Score: <span id="score">0</span></div>
+                </div>
+                <div class="question" id="question">Loading...</div>
+                <input type="number" class="answer-input" id="answerInput" placeholder="?" step="any">
+            </div>
+
+            <div class="results-screen">
+                <h2>Challenge Complete!</h2>
+                <div class="final-score" id="finalScore">0</div>
+                <div class="stat-circles">
+                    <div class="stat-circle">
+                        <div class="stat-label">Questions Answered</div>
+                        <div class="stat-value" id="correctCount">0</div>
+                    </div>
+                    <div class="stat-circle">
+                        <div class="stat-label">Avg Time</div>
+                        <div class="stat-value" id="avgTime">0s</div>
+                    </div>
+                </div>
+                <button class="play-again-btn" onclick="resetAdvancedGame()">Play Again</button>
+            </div>
+            <button class="back-btn" id="backBtn" onclick="handleBackButton()">Back to Home</button>
+        </main>
+    </div>
+    
+    <script src="advanced.js"></script>
+    <script>
+        let gameState = {
+            timeLimit: 60,
+            timeLeft: 60,
+            score: 0,
+            correctAnswers: 0,
+            questionTimes: [],
+            currentQuestion: null,
+            gameTimer: null,
+            startTime: null,
+            gameActive: false
+        };
+
+        function startAdvancedGame() {
+            const selectedTime = parseInt(document.querySelector('input[name="time"]:checked').value);
+            gameState.timeLimit = selectedTime;
+            gameState.timeLeft = selectedTime;
+            gameState.score = 0;
+            gameState.correctAnswers = 0;
+            gameState.questionTimes = [];
+            gameState.startTime = Date.now();
+            gameState.gameActive = true;
+            
+            document.querySelector('.setup-screen').classList.remove('active');
+            document.querySelector('.game-screen').classList.add('active');
+            document.querySelector('.results-screen').classList.remove('active');
+            
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').disabled = false;
+            
+            nextAdvancedQuestion();
+            updateTimerDisplay();
+            
+            gameState.gameTimer = setInterval(() => {
+                gameState.timeLeft--;
+                updateTimerDisplay();
+                if (gameState.timeLeft <= 0) {
+                    endAdvancedGame();
+                }
+            }, 1000);
+            
+            updateBackButtonText();
+        }
+
+        function endAdvancedGame() {
+            gameState.gameActive = false;
+            clearInterval(gameState.gameTimer);
+            document.getElementById('answerInput').disabled = true;
+            
+            document.querySelector('.game-screen').classList.remove('active');
+            document.querySelector('.results-screen').classList.add('active');
+            
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('correctCount').textContent = gameState.correctAnswers;
+            
+            let avgTime = 0;
+            if (gameState.questionTimes.length > 0) {
+                avgTime = Math.round(gameState.questionTimes.reduce((a, b) => a + b, 0) / gameState.questionTimes.length / 1000 * 10) / 10;
+            }
+            document.getElementById('avgTime').textContent = avgTime + 's';
+            
+            updateBackButtonText();
+        }
+
+        function nextAdvancedQuestion() {
+            const q = generateWordProblem();
+            gameState.currentQuestion = q;
+            document.getElementById('question').textContent = q.question;
+            document.getElementById('answerInput').value = '';
+            gameState.currentQuestionStart = Date.now();
+        }
+
+        function checkAdvancedAnswer() {
+            if (!gameState.gameActive) return;
+            const userAnswer = parseFloat(document.getElementById('answerInput').value);
+            const correctAnswer = gameState.currentQuestion.answer;
+            if (isNaN(userAnswer)) return;
+            
+            if (Math.abs(userAnswer - correctAnswer) < 0.01) {
+                const questionTime = Date.now() - gameState.currentQuestionStart;
+                gameState.questionTimes.push(questionTime);
+                gameState.score += 10;
+                gameState.correctAnswers++;
+                document.getElementById('score').textContent = gameState.score;
+                nextAdvancedQuestion();
+            }
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(gameState.timeLeft / 60);
+            const seconds = gameState.timeLeft % 60;
+            document.getElementById('timerText').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            const progress = (gameState.timeLeft / gameState.timeLimit) * 360;
+            document.getElementById('timerCircle').style.background = `conic-gradient(#00cc66 0deg, #00cc66 ${progress}deg, #333333 ${progress}deg, #333333 360deg)`;
+        }
+
+        function resetAdvancedGame() {
+            document.querySelector('.results-screen').classList.remove('active');
+            document.querySelector('.setup-screen').classList.add('active');
+            updateBackButtonText();
+        }
+
+        function handleBackButton() {
+            const setupScreen = document.querySelector('.setup-screen');
+            const gameScreen = document.querySelector('.game-screen');
+            const resultsScreen = document.querySelector('.results-screen');
+            
+            if (setupScreen.classList.contains('active') || resultsScreen.classList.contains('active')) {
+                window.location.href = 'index.html';
+            } else {
+                // Go back to setup screen
+                if (gameState.gameTimer) {
+                    clearInterval(gameState.gameTimer);
+                }
+                gameState.gameActive = false;
+                document.querySelector('.game-screen').classList.remove('active');
+                document.querySelector('.setup-screen').classList.add('active');
+                updateBackButtonText();
+            }
+        }
+
+        function updateBackButtonText() {
+            const setupScreen = document.querySelector('.setup-screen');
+            const gameScreen = document.querySelector('.game-screen');
+            const resultsScreen = document.querySelector('.results-screen');
+            const backBtn = document.getElementById('backBtn');
+            
+            if (setupScreen.classList.contains('active') || resultsScreen.classList.contains('active')) {
+                backBtn.textContent = 'Back to Home';
+            } else if (gameScreen.classList.contains('active')) {
+                backBtn.textContent = 'Back';
+            }
+        }
+
+        // Radio button event listeners
+        document.querySelectorAll('.radio-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.radio-item').forEach(radio => radio.classList.remove('selected'));
+                this.classList.add('selected');
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+            });
+        });
+
+        // Answer input event listener
+        document.getElementById('answerInput').addEventListener('input', function(e) {
+            checkAdvancedAnswer();
+        });
+
+        // Initialize
+        updateBackButtonText();
+    </script>
+    <style>
+        .radio-item input[type="radio"] {
+            display: none;
+        }
+        .quant-white { color: #fff; }
+        .crush-green { color: #00cc66; }
+        .container {
+            max-width: 600px;
+        }
+        .question {
+            font-size: 1.2em;
+        }
+    </style>
+</body>
+</html>

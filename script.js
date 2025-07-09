@@ -202,7 +202,7 @@ function updateTimerDisplay() {
     const percentage = (elapsed / totalTime) * 360;
     
     const timerCircle = document.getElementById('timerCircle');
-    timerCircle.style.background = `conic-gradient(#00aaff ${percentage}deg, #333333 ${percentage}deg)`;
+    timerCircle.style.background = `conic-gradient(#00cc66 ${percentage}deg, #333333 ${percentage}deg)`;
 }
 
 function generateNewQuestion() {

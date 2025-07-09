@@ -20,7 +20,7 @@
             background: #111111;
             border: 1px solid #333333;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0, 123, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0, 204, 102, 0.1);
             padding: 40px;
             max-width: 500px;
             width: 90%;
@@ -28,11 +28,11 @@
         }
 
         h1 {
-            color: #00aaff;
+            color: #00cc66;
             margin-bottom: 30px;
             font-size: 2.5em;
             font-weight: 600;
-            text-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
+            text-shadow: 0 0 20px rgba(0, 204, 102, 0.3);
         }
 
         .setup-screen, .game-screen, .results-screen {
@@ -76,13 +76,13 @@
 
         .checkbox-item:hover {
             background: #222222;
-            border-color: #00aaff;
+            border-color: #00cc66;
         }
 
         .checkbox-item.selected {
-            background: #001a33;
-            border-color: #00aaff;
-            box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+            background: #00331a;
+            border-color: #00cc66;
+            box-shadow: 0 0 10px rgba(0, 204, 102, 0.2);
         }
 
         .checkbox-item input {
@@ -110,13 +110,13 @@
 
         .radio-item:hover {
             background: #222222;
-            border-color: #00aaff;
+            border-color: #00cc66;
         }
 
         .radio-item.selected {
-            background: #001a33;
-            border-color: #00aaff;
-            box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+            background: #00331a;
+            border-color: #00cc66;
+            box-shadow: 0 0 10px rgba(0, 204, 102, 0.2);
         }
 
         .radio-item input {
@@ -124,7 +124,7 @@
         }
 
         .start-btn {
-            background: linear-gradient(45deg, #00aaff, #0088cc);
+            background: linear-gradient(45deg, #00cc66, #00994d);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -134,12 +134,12 @@
             cursor: pointer;
             margin-top: 20px;
             transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 204, 102, 0.3);
         }
 
         .start-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 170, 255, 0.5);
+            box-shadow: 0 0 30px rgba(0, 204, 102, 0.5);
         }
 
         .start-btn:disabled {
@@ -173,7 +173,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: conic-gradient(#00aaff 0deg, #333333 0deg);
+            background: conic-gradient(#00cc66 0deg, #333333 0deg);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -195,8 +195,8 @@
         .score {
             font-size: 1.5em;
             font-weight: 600;
-            color: #00aaff;
-            text-shadow: 0 0 10px rgba(0, 170, 255, 0.3);
+            color: #00cc66;
+            text-shadow: 0 0 10px rgba(0, 204, 102, 0.3);
         }
 
         .question {
@@ -223,8 +223,8 @@
 
         .answer-input:focus {
             outline: none;
-            border-color: #00aaff;
-            box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+            border-color: #00cc66;
+            box-shadow: 0 0 15px rgba(0, 204, 102, 0.3);
         }
 
         .answer-input.correct {
@@ -253,14 +253,14 @@
 
         .final-score {
             font-size: 3em;
-            color: #00aaff;
+            color: #00cc66;
             margin: 20px 0;
             font-weight: 600;
-            text-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
+            text-shadow: 0 0 20px rgba(0, 204, 102, 0.5);
         }
 
         .play-again-btn {
-            background: linear-gradient(45deg, #00aaff, #0088cc);
+            background: linear-gradient(45deg, #00cc66, #00994d);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -270,12 +270,12 @@
             cursor: pointer;
             margin-top: 20px;
             transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 204, 102, 0.3);
         }
 
         .play-again-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 170, 255, 0.5);
+            box-shadow: 0 0 30px rgba(0, 204, 102, 0.5);
         }
 
         .stats {
@@ -288,7 +288,7 @@
         }
 
         .stats h3 {
-            color: #00aaff;
+            color: #00cc66;
             margin-bottom: 10px;
             font-weight: 500;
         }
@@ -332,6 +332,31 @@
 
         .range-input-group input:focus {
             outline: none;
-            border-color: #00aaff;
-            box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+            border-color: #00cc66;
+            box-shadow: 0 0 10px rgba(0, 204, 102, 0.2);
+        }
+
+        .back-btn {
+            margin-top: 30px;
+            background: linear-gradient(45deg, #00cc66, #00994d);
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 204, 102, 0.3);
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(45deg, #00994d, #00cc66);
+            box-shadow: 0 0 30px rgba(0, 204, 102, 0.5);
+            transform: translateY(-2px);
         }
