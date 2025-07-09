@@ -246,6 +246,35 @@ function generateNewQuestion() {
             answer = num1 / num2;
             questionText = `${num1} ÷ ${num2}`;
             break;
+        case 'exponents':
+            // Perfect squares: base numbers 1-15
+            const base = Math.floor(Math.random() * 15) + 1;
+            answer = base * base;
+            questionText = `${base}²`;
+            break;
+        case 'percentages':
+            const percentages = [10, 20, 25, 50];
+            const percent = percentages[Math.floor(Math.random() * percentages.length)];
+            
+            // Generate clean base numbers that result in whole number answers
+            let value;
+            if (percent === 10) {
+                // 10% - use numbers divisible by 10
+                value = (Math.floor(Math.random() * 20) + 1) * 10; // 10, 20, 30, ..., 200
+            } else if (percent === 20) {
+                // 20% - use numbers divisible by 5
+                value = (Math.floor(Math.random() * 40) + 2) * 5; // 10, 15, 20, ..., 200
+            } else if (percent === 25) {
+                // 25% - use numbers divisible by 4
+                value = (Math.floor(Math.random() * 50) + 3) * 4; // 12, 16, 20, ..., 200
+            } else if (percent === 50) {
+                // 50% - use numbers divisible by 2
+                value = (Math.floor(Math.random() * 100) + 6) * 2; // 12, 14, 16, ..., 200
+            }
+            
+            answer = (value * percent) / 100;
+            questionText = `${percent}% of ${value}`;
+            break;
     }
 
     // Round answer to 2 decimal places

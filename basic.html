@@ -31,6 +31,14 @@
                                 <input type="checkbox" id="division">
                                 <label for="division">Division (÷)</label>
                             </div>
+                            <div class="checkbox-item" data-operation="exponents">
+                                <input type="checkbox" id="exponents">
+                                <label for="exponents">Exponents (x²)</label>
+                            </div>
+                            <div class="checkbox-item" data-operation="percentages">
+                                <input type="checkbox" id="percentages">
+                                <label for="percentages">Percentages (%)</label>
+                            </div>
                         </div>
                     </div>
 
@@ -182,9 +190,15 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0, 123, 255, 0.1);
             padding: 40px;
-            max-width: 500px;
+            max-width: 700px;
             width: 90%;
             text-align: center;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
         }
         .back-btn {
             margin-top: 30px;
@@ -198,16 +212,10 @@
             cursor: pointer;
             box-shadow: 0 0 20px rgba(0, 204, 102, 0.3);
             transition: all 0.3s ease;
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin-left: auto;
-            margin-right: auto;
         }
         .back-btn:hover {
-            background: linear-gradient(45deg, #00994d, #00cc66);
-            box-shadow: 0 0 30px rgba(0, 204, 102, 0.5);
             transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 204, 102, 0.5);
         }
         .decimals-center {
             justify-content: center;
