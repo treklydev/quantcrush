@@ -98,7 +98,8 @@
             document.querySelector('.game-screen').classList.add('active');
             document.querySelector('.results-screen').classList.remove('active');
             
-            document.getElementById('score').textContent = gameState.score;
+            // Reset score display to 0
+            document.getElementById('score').textContent = '0';
             document.getElementById('answerInput').value = '';
             document.getElementById('answerInput').disabled = false;
             
@@ -153,9 +154,13 @@
             if (Math.abs(userAnswer - correctAnswer) < 0.01) {
                 const questionTime = Date.now() - gameState.currentQuestionStart;
                 gameState.questionTimes.push(questionTime);
-                gameState.score += 10;
                 gameState.correctAnswers++;
+                gameState.score = gameState.correctAnswers; // Score equals correct answers
                 document.getElementById('score').textContent = gameState.score;
+                
+                // Debug: log the score to console
+                console.log('Correct answer! Score:', gameState.score, 'Correct answers:', gameState.correctAnswers);
+                
                 nextAdvancedQuestion();
             }
         }

@@ -171,8 +171,98 @@
             showSetupScreenOnly();
             updateBackButtonText();
         };
+        // Standard Mode function
+        window.setStandardMode = function() {
+            // Set operations: addition, subtraction, multiplication, division
+            document.getElementById('addition').checked = true;
+            document.getElementById('subtraction').checked = true;
+            document.getElementById('multiplication').checked = true;
+            document.getElementById('division').checked = true;
+            document.getElementById('exponents').checked = false;
+            document.getElementById('percentages').checked = false;
+            
+            // Update visual states
+            document.querySelectorAll('.checkbox-item[data-operation]').forEach(item => {
+                const checkbox = item.querySelector('input');
+                item.classList.toggle('selected', checkbox.checked);
+            });
+            
+            // Set number range (2-100 for standard difficulty)
+            document.getElementById('minRange').value = '2';
+            document.getElementById('maxRange').value = '100';
+            
+            // Disable decimals
+            document.getElementById('includeDecimals').checked = false;
+            document.getElementById('decimalsToggle').classList.remove('selected');
+            
+            // Set time to 2 minutes
+            document.getElementById('time120').checked = true;
+            document.querySelectorAll('.radio-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelector('.radio-item[data-time="120"]').classList.add('selected');
+            
+            // Update game state
+            if (window.gameState) {
+                window.gameState.operations = ['addition', 'subtraction', 'multiplication', 'division'];
+                window.gameState.minRange = 2;
+                window.gameState.maxRange = 100;
+                window.gameState.includeDecimals = false;
+                window.gameState.timeLimit = 120;
+            }
+            
+            // Enable start button
+            document.querySelector('.start-btn').disabled = false;
+            
+
+        };
+        
         // On load
         updateBackButtonText();
+    </script>
+    
+    <!-- Firebase Modular SDK Initialization -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+      import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyB50WDSGx1A38iBGrVn5702Q5WRoGN_Skw",
+        authDomain: "quantcrush-1bb6e.firebaseapp.com",
+        projectId: "quantcrush-1bb6e",
+        storageBucket: "quantcrush-1bb6e.appspot.com",
+        messagingSenderId: "754971876089",
+        appId: "1:754971876089:web:fe4816fb30890755242028",
+        measurementId: "G-D1PVMYV2RX"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // --- Save Game Result Function ---
+      window.saveGameResult = async function(gameData) {
+        const user = auth.currentUser;
+        if (!user) {
+          console.warn('User not logged in, not saving game result.');
+          return;
+        }
+        try {
+          console.log('Attempting to save game result for user:', user.uid, gameData);
+          const gamesRef = collection(db, 'users', user.uid, 'games');
+          await addDoc(gamesRef, {
+            ...gameData,
+            savedAt: serverTimestamp()
+          });
+          console.log('Game result saved to Firestore.');
+        } catch (e) {
+          console.error('Error saving game result:', e);
+        }
+      };
+      // --- End Save Game Result Function ---
     </script>
     <style>
         body {
@@ -314,6 +404,8 @@
         }
         .quant-white { color: #fff; }
         .crush-green { color: #00cc66; }
+        
+
     </style>
 </body>
 </html> 

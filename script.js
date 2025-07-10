@@ -13,7 +13,8 @@ let gameState = {
     questionTimes: [],
     includeDecimals: false,
     gameActive: false,
-    sessionId: 0 // Added sessionId to gameState
+    sessionId: 0, // Added sessionId to gameState
+    questionDetails: [] // Track per-question analytics
 };
 
 let globalGameTimer = null;
@@ -160,8 +161,14 @@ function startGame() {
     gameState.correctAnswers = 0;
     gameState.totalQuestions = 0;
     gameState.questionTimes = [];
+    gameState.questionDetails = [];
     gameState.startTime = Date.now();
+    gameState.startedAt = new Date().toISOString();
     gameState.gameActive = true;
+    
+    // Reset score display
+    document.getElementById('score').textContent = '0';
+    
     generateNewQuestion();
     startTimer();
 }
@@ -282,7 +289,8 @@ function generateNewQuestion() {
 
     gameState.currentQuestion = {
         answer: answer,
-        startTime: Date.now()
+        startTime: Date.now(),
+        operationType: operation
     };
 
     document.getElementById('question').textContent = questionText + ' = ?';
@@ -301,12 +309,21 @@ function checkAnswer() {
     const questionTime = Date.now() - gameState.currentQuestion.startTime;
     gameState.questionTimes.push(questionTime);
     gameState.totalQuestions++;
+    // Record analytics for this question
+    gameState.questionDetails.push({
+        operationType: gameState.currentQuestion.operationType,
+        isCorrect: Math.abs(userAnswer - correctAnswer) < 0.01,
+        timeTakenMs: questionTime
+    });
 
     if (Math.abs(userAnswer - correctAnswer) < 0.01) {
         // Correct answer
-        gameState.score += 10;
         gameState.correctAnswers++;
+        gameState.score = gameState.correctAnswers; // Score equals correct answers
         document.getElementById('score').textContent = gameState.score;
+        
+        // Debug: log the score to console
+        console.log('Correct answer! Score:', gameState.score, 'Correct answers:', gameState.correctAnswers);
         
         // Immediately generate next question for speed
         generateNewQuestion();
@@ -330,6 +347,20 @@ function endGame() {
     document.getElementById('finalScore').textContent = gameState.score;
     document.getElementById('correctCount').textContent = gameState.correctAnswers;
     document.getElementById('avgTime').textContent = avgTime + 's';
+    // --- Save analytics to Firestore if available ---
+    if (window.saveGameResult) {
+        const endedAt = new Date().toISOString();
+        window.saveGameResult({
+            mode: 'basic',
+            score: gameState.score,
+            correctAnswers: gameState.correctAnswers,
+            totalQuestions: gameState.totalQuestions,
+            avgTimePerQuestion: avgTime,
+            startedAt: gameState.startedAt,
+            endedAt,
+            questions: gameState.questionDetails
+        });
+    }
 }
 
 function resetGame() {

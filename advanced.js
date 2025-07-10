@@ -117,4 +117,4 @@ function generateWordProblem() {
 // Export for use in QuantCrush
 if (typeof module !== 'undefined') {
   module.exports = { advancedTemplates, generateWordProblem };
-} 
+}

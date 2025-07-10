@@ -5,119 +5,589 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuantCrush Analytics</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1><span class="quant-white">Quant</span><span class="crush-green">Crush</span></h1>
         <main class="main-content">
             <div class="analytics-screen active">
-                <h2>Analytics & Leaderboard</h2>
-                <p style="color: #ccc; margin-bottom: 30px; font-size: 1em;">Track your progress and compare with others</p>
+                <h2>Analytics Dashboard</h2>
+                <p style="color: #ccc; margin-bottom: 30px; font-size: 1.2em;">Track your performance and progress</p>
                 
-                <div class="analytics-placeholder">
-                    <div class="placeholder-icon">📊</div>
-                    <h3>Coming Soon</h3>
-                    <p>Score tracking and leaderboard features are in development.</p>
-                    <p>Track your progress across Basic and Advanced modes.</p>
-                </div>
-                
-                <div class="feature-preview">
-                    <h3>Planned Features:</h3>
-                    <ul class="feature-list">
-                        <li>📈 Personal score history</li>
-                        <li>🏆 Global leaderboards</li>
-                        <li>📊 Performance analytics</li>
-                        <li>🎯 Achievement system</li>
-                        <li>📱 Progress tracking</li>
-                    </ul>
+                <div id="basicAnalytics">
+                  <div id="analyticsLoginPrompt" style="display:none;">
+                    <div class="login-prompt-box">
+                      <h3>Login Required</h3>
+                      <p>Please log in to view your analytics and track your progress.</p>
+                      <button class="auth-btn" onclick="window.location.href='index.html'">Go to Login</button>
+                    </div>
+                  </div>
+                  
+                  <div id="analyticsLoading" style="display:none;">
+                    <div class="loading-spinner">
+                      <div class="spinner"></div>
+                      <p>Loading your data...</p>
+                    </div>
+                  </div>
+                  
+                  <div id="analyticsContent" style="display:none;">
+                    <div class="analytics-layout">
+                      <div class="analytics-section full-width">
+                        <h3>Score Progress</h3>
+                        <div class="chart-container">
+                          <canvas id="progressChart"></canvas>
+                        </div>
+                      </div>
+                      
+                      <div class="analytics-bottom-row">
+                        <div class="analytics-section">
+                          <h3>Most Recent Game</h3>
+                          <div id="recentGameContainer"></div>
+                        </div>
+                        
+                        <div class="analytics-section">
+                          <h3>Performance by Operation</h3>
+                          <div id="operationStatsContainer"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
             </div>
             <button class="back-btn" onclick="window.location.href='index.html'">Back to Home</button>
         </main>
     </div>
     
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+      import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+      // Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyB50WDSGx1A38iBGrVn5702Q5WRoGN_Skw",
+        authDomain: "quantcrush-1bb6e.firebaseapp.com",
+        projectId: "quantcrush-1bb6e",
+        storageBucket: "quantcrush-1bb6e.appspot.com",
+        messagingSenderId: "754971876089",
+        appId: "1:754971876089:web:fe4816fb30890755242028",
+        measurementId: "G-D1PVMYV2RX"
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // DOM elements
+      const loginPrompt = document.getElementById('analyticsLoginPrompt');
+      const loading = document.getElementById('analyticsLoading');
+      const content = document.getElementById('analyticsContent');
+      const recentGameContainer = document.getElementById('recentGameContainer');
+      const operationStatsContainer = document.getElementById('operationStatsContainer');
+
+      function showState(state) {
+        loginPrompt.style.display = state === 'login' ? '' : 'none';
+        loading.style.display = state === 'loading' ? '' : 'none';
+        content.style.display = state === 'content' ? '' : 'none';
+      }
+
+      function createProgressChart(games) {
+        const ctx = document.getElementById('progressChart');
+        if (!ctx) return;
+
+        // Sort games by date (oldest first for chart)
+        const sortedGames = games.sort((a, b) => {
+          const dateA = a.savedAt && a.savedAt.toDate ? a.savedAt.toDate() : new Date(a.endedAt || 0);
+          const dateB = b.savedAt && b.savedAt.toDate ? b.savedAt.toDate() : new Date(b.endedAt || 0);
+          return dateA - dateB;
+        });
+
+        const labels = sortedGames.map((g, index) => `Game ${index + 1}`);
+        const scores = sortedGames.map(g => g.score || 0);
+
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Score',
+              data: scores,
+              borderColor: '#00cc66',
+              backgroundColor: 'rgba(0, 204, 102, 0.1)',
+              tension: 0.4,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                labels: {
+                  color: '#fff',
+                  font: {
+                    size: 12
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: {
+                  color: '#ccc',
+                  maxTicksLimit: 10
+                },
+                grid: {
+                  color: '#333'
+                }
+              },
+              y: {
+                ticks: {
+                  color: '#ccc'
+                },
+                grid: {
+                  color: '#333'
+                }
+              }
+            }
+          }
+        });
+      }
+
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          showState('login');
+          return;
+        }
+        
+        // Function to load analytics data
+        async function loadAnalyticsData() {
+          showState('loading');
+          
+          try {
+            const gamesRef = collection(db, 'users', user.uid, 'games');
+            
+            // First, let's check if there are any games at all (without mode filter)
+            const allGamesQuery = query(gamesRef, orderBy('savedAt', 'desc'));
+            const allGamesSnapshot = await getDocs(allGamesQuery);
+            console.log('All games (no mode filter):', allGamesSnapshot.size);
+            allGamesSnapshot.forEach(doc => {
+              console.log('All game data:', { id: doc.id, ...doc.data() });
+            });
+            
+            // Now get only basic mode games - try without orderBy first, then sort client-side
+            const qGames = query(gamesRef, where('mode', '==', 'basic'));
+            console.log('Firebase query for basic mode (no orderBy):', qGames);
+            
+            const querySnapshot = await getDocs(qGames);
+            console.log('Query snapshot size:', querySnapshot.size);
+            console.log('Query snapshot empty:', querySnapshot.empty);
+            
+            const games = [];
+            querySnapshot.forEach(doc => {
+              const gameData = { id: doc.id, ...doc.data() };
+              console.log('Game data from Firebase:', gameData);
+              games.push(gameData);
+            });
+            
+            console.log('Total games found:', games.length);
+            
+            // Sort by date (most recent first) - this should be more reliable
+            games.sort((a, b) => {
+              const dateA = a.savedAt && a.savedAt.toDate ? a.savedAt.toDate() : new Date(a.endedAt || 0);
+              const dateB = b.savedAt && b.savedAt.toDate ? b.savedAt.toDate() : new Date(b.endedAt || 0);
+              console.log('Comparing dates:', { 
+                gameA: a.id, dateA: dateA, 
+                gameB: b.id, dateB: dateB, 
+                result: dateB - dateA 
+              });
+              return dateB - dateA; // Most recent first
+            });
+            
+            console.log('Games after date sorting (first 3):', games.slice(0, 3).map(g => ({
+              id: g.id,
+              date: g.savedAt && g.savedAt.toDate ? g.savedAt.toDate() : new Date(g.endedAt || 0),
+              score: g.score
+            })));
+            
+            if (games.length === 0) {
+              operationStatsContainer.innerHTML = `
+                <div class="empty-state">
+                  <div class="empty-icon">🎯</div>
+                  <h4>No games yet</h4>
+                  <p>Play some Basic Mode games to see your stats here!</p>
+                </div>
+              `;
+              showState('content');
+              return;
+            }
+            
+                        // Create progress chart
+            createProgressChart(games);
+            
+            // Show most recent game - use the same approach as the chart
+            if (games.length > 0) {
+              // The chart sorts games by date (oldest first), so the last game in the array is the most recent
+              const mostRecentGame = games[games.length - 1]; // Last game in the array (most recent)
+              
+              console.log('Most recent game (last in array):', mostRecentGame);
+              
+              const dateStr = mostRecentGame.savedAt && mostRecentGame.savedAt.toDate ? 
+                mostRecentGame.savedAt.toDate().toLocaleDateString() + ' ' + mostRecentGame.savedAt.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 
+                (mostRecentGame.endedAt ? new Date(mostRecentGame.endedAt).toLocaleDateString() + ' ' + new Date(mostRecentGame.endedAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Unknown');
+              
+              recentGameContainer.innerHTML = `
+                <div class="recent-game-card">
+                  <div class="recent-game-info">
+                    <div class="recent-game-date">${dateStr}</div>
+                    <div class="recent-game-score">
+                      <span class="score-label">Score:</span>
+                      <span class="score-value">${mostRecentGame.score || 0}</span>
+                    </div>
+                    <div class="recent-game-details">
+                      <span>Correct: ${mostRecentGame.correctAnswers || 0}</span>
+                      <span>Avg Time: ${mostRecentGame.avgTimePerQuestion || 0}s</span>
+                    </div>
+                  </div>
+                </div>
+              `;
+            } else {
+              recentGameContainer.innerHTML = `
+                <div class="empty-state">
+                  <div class="empty-icon">🎯</div>
+                  <h4>No games yet</h4>
+                  <p>Play some Basic Mode games to see your stats here!</p>
+                </div>
+              `;
+            }
+            
+            
+            
+            // Compute per-operation stats
+            const opStats = {};
+            games.forEach(g => {
+              if (Array.isArray(g.questions)) {
+                g.questions.forEach(q => {
+                  if (!opStats[q.operationType]) opStats[q.operationType] = { total: 0, correct: 0, times: [] };
+                  opStats[q.operationType].total++;
+                  if (q.isCorrect) opStats[q.operationType].correct++;
+                  if (typeof q.timeTakenMs === 'number') opStats[q.operationType].times.push(q.timeTakenMs);
+                });
+              }
+            });
+            
+            // Show per-operation stats
+            operationStatsContainer.innerHTML = `
+              <div class="table-container">
+                <table class="analytics-table">
+                  <thead>
+                    <tr>
+                      <th>Operation</th>
+                      <th>Avg Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${Object.entries(opStats).map(([op, stat]) => {
+                      const avgTime = stat.times.length ? (stat.times.reduce((a,b)=>a+b,0)/stat.times.length/1000).toFixed(2) : '-';
+                      return `
+                        <tr>
+                          <td><span class="operation-name">${op.charAt(0).toUpperCase()+op.slice(1)}</span></td>
+                          <td>${avgTime}s</td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            `;
+            
+            showState('content');
+          } catch (e) {
+            console.error('Error fetching analytics:', e);
+            operationStatsContainer.innerHTML = `
+              <div class="error-state">
+                <div class="error-icon">⚠️</div>
+                <h4>Error loading data</h4>
+                <p>There was an error loading your analytics. Please try again later.</p>
+              </div>
+            `;
+            showState('content');
+          }
+        }
+        
+        // Load data initially
+        await loadAnalyticsData();
+        
+        // Set up auto-refresh every 30 seconds
+        const refreshInterval = setInterval(loadAnalyticsData, 30000);
+        
+        // Clean up interval when user logs out
+        return () => {
+          clearInterval(refreshInterval);
+        };
+      });
+      
+
+    </script>
+    
     <style>
-        .analytics-screen {
-            text-align: center;
-            padding: 20px 0;
+      .analytics-screen {
+        text-align: center;
+        padding: 10px 0;
+      }
+      
+      .analytics-screen h2 {
+        color: #00cc66;
+        margin-bottom: 10px;
+        font-size: 2em;
+        font-weight: 600;
+      }
+      
+      .analytics-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin: 15px 0;
+      }
+      
+      .analytics-section {
+        background: #1a1a1a;
+        border: 2px solid #333333;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: left;
+      }
+      
+      .full-width {
+        width: 100%;
+      }
+      
+      .analytics-bottom-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      
+      .analytics-section h3 {
+        color: #00cc66;
+        font-size: 1.4em;
+        margin-bottom: 20px;
+        font-weight: 600;
+        text-align: center;
+      }
+      
+      .chart-container {
+        height: 300px;
+        position: relative;
+        margin: 20px 0;
+      }
+      
+      .table-container {
+        overflow-x: auto;
+        border-radius: 10px;
+        background: #222;
+      }
+      
+
+      
+      .analytics-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95em;
+      }
+      
+      .analytics-table th {
+        background: #333;
+        color: #00cc66;
+        font-weight: 600;
+        padding: 12px 8px;
+        text-align: center;
+        border-bottom: 2px solid #444;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      
+      .analytics-table td {
+        padding: 10px 8px;
+        text-align: center;
+        border-bottom: 1px solid #333;
+        color: #fff;
+      }
+      
+      .analytics-table tr:hover {
+        background: #2a2a2a;
+      }
+      
+      .score-value {
+        color: #00cc66;
+        font-weight: 600;
+      }
+      
+      .operation-name {
+        color: #00cc66;
+        font-weight: 500;
+      }
+      
+      .recent-game-card {
+        background: linear-gradient(135deg, #2a2a2a 60%, #1a1a1a 100%);
+        border: 2px solid #333333;
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      
+      .recent-game-info {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .recent-game-date {
+        color: #cccccc;
+        font-size: 1.1em;
+        font-weight: 500;
+      }
+      
+      .recent-game-score {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .score-label {
+        color: #ffffff;
+        font-size: 1.2em;
+        font-weight: 500;
+      }
+      
+      .recent-game-details {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        color: #aaaaaa;
+        font-size: 1em;
+      }
+      
+      .login-prompt-box {
+        background: #1a1a1a;
+        border: 2px solid #333333;
+        border-radius: 15px;
+        padding: 40px 30px;
+        margin: 30px 0;
+        text-align: center;
+      }
+      
+      .login-prompt-box h3 {
+        color: #ff4d4d;
+        font-size: 1.5em;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+      
+      .login-prompt-box p {
+        color: #cccccc;
+        font-size: 1.1em;
+        margin: 15px 0;
+        line-height: 1.5;
+      }
+      
+      .loading-spinner {
+        text-align: center;
+        padding: 40px 20px;
+      }
+      
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #333;
+        border-top: 4px solid #00cc66;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading-spinner p {
+        color: #aaa;
+        font-size: 1.1em;
+      }
+      
+      .empty-state, .error-state {
+        text-align: center;
+        padding: 40px 20px;
+      }
+      
+      .empty-icon, .error-icon {
+        font-size: 3em;
+        margin-bottom: 15px;
+      }
+      
+      .empty-state h4, .error-state h4 {
+        color: #00cc66;
+        font-size: 1.3em;
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+      
+      .empty-state p, .error-state p {
+        color: #aaa;
+        font-size: 1.1em;
+        line-height: 1.5;
+      }
+      
+      .auth-btn {
+        background: linear-gradient(45deg, #00cc66, #00994d);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 1em;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 15px;
+      }
+      
+      .auth-btn:hover {
+        background: linear-gradient(45deg, #00994d, #00cc66);
+        transform: translateY(-1px);
+      }
+      
+
+      
+      @media (max-width: 600px) {
+        .analytics-bottom-row {
+          grid-template-columns: 1fr;
+          gap: 20px;
         }
         
-        .analytics-screen h2 {
-            color: #00cc66;
-            margin-bottom: 10px;
-            font-size: 2em;
-            font-weight: 600;
+        .analytics-table {
+          font-size: 0.85em;
         }
         
-        .analytics-placeholder {
-            background: #1a1a1a;
-            border: 2px solid #333333;
-            border-radius: 15px;
-            padding: 40px 30px;
-            margin: 30px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .analytics-table th,
+        .analytics-table td {
+          padding: 8px 4px;
         }
         
-        .placeholder-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
+        .chart-container {
+          height: 250px;
         }
-        
-        .analytics-placeholder h3 {
-            color: #00cc66;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        
-        .analytics-placeholder p {
-            color: #cccccc;
-            font-size: 1.1em;
-            margin: 10px 0;
-            line-height: 1.5;
-        }
-        
-        .feature-preview {
-            background: #1a1a1a;
-            border: 2px solid #333333;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 30px 0;
-            text-align: left;
-        }
-        
-        .feature-preview h3 {
-            color: #00cc66;
-            font-size: 1.3em;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .feature-list li {
-            color: #cccccc;
-            font-size: 1.1em;
-            margin: 15px 0;
-            padding: 10px 15px;
-            background: #2a2a2a;
-            border-radius: 8px;
-            border-left: 4px solid #00cc66;
-            transition: all 0.3s ease;
-        }
-        
-        .feature-list li:hover {
-            background: #333333;
-            transform: translateX(5px);
-        }
-        
-        .quant-white { color: #fff; }
-        .crush-green { color: #00cc66; }
+      }
+      
+      .quant-white { color: #fff; }
+      .crush-green { color: #00cc66; }
+      
+      /* Override container width for analytics */
+      .container {
+        max-width: 1200px !important;
+      }
     </style>
 </body>
 </html> 
