@@ -306,13 +306,10 @@ function checkAnswer() {
         // Correct answer
         gameState.score += 10;
         gameState.correctAnswers++;
-        answerInput.classList.add('correct');
         document.getElementById('score').textContent = gameState.score;
         
-        setTimeout(() => {
-            answerInput.classList.remove('correct');
-            generateNewQuestion();
-        }, 500);
+        // Immediately generate next question for speed
+        generateNewQuestion();
     } else {
         // Incorrect answer - no visual feedback, just continue
     }

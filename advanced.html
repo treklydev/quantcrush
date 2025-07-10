@@ -12,7 +12,7 @@
         <main class="main-content">
             <!-- Main game content starts here -->
             <div class="setup-screen active">
-                <p style="color: #ccc; margin-bottom: 20px; font-size: 1em;">Set a time limit and answer as many applied questions as you can</p>
+                <p style="color: #ccc; margin-bottom: 20px; font-size: 1.4em; line-height: 1.5;">Set a time limit and answer as many applied questions as you can</p>
                 <div class="option-group">
                     <h3>Time Limit:</h3>
                     <div class="radio-group">
@@ -235,7 +235,47 @@
             max-width: 600px;
         }
         .question {
-            font-size: 1.2em;
+            font-size: 1.8em;
+            font-weight: 500;
+            line-height: 1.4;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .stat-circles {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin: 32px 0 0 0;
+        }
+        .stat-circle {
+            background: linear-gradient(135deg, #2a2a2a 60%, #1a1a1a 100%);
+            border-radius: 50%;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 24px 0 rgba(0,0,0,0.3);
+            color: #fff;
+            font-weight: 600;
+            position: relative;
+            border: 2.5px solid #333333;
+        }
+        .stat-label {
+            font-size: 0.95em;
+            color: #cccccc;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .stat-value {
+            font-size: 2.3em;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.3);
         }
     </style>
 </body>
