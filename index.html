@@ -6,6 +6,10 @@
     <title>QuantCrush - Landing</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
+    <meta name="description" content="QuantCrush is a web-based math game to train your brain with basic and applied math challenges. Track your progress and improve your skills!">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#00cc66">
+    <link rel="apple-touch-icon" href="favicon.png">
     <style>
         .landing-container {
             background: #111111;
@@ -71,7 +75,7 @@
 <body>
     <div class="landing-container">
         <div class="landing-title"><span class="quant-white">Quant</span><span class="crush-green">Crush</span></div>
-        <div class="landing-subtitle">Train Your Brain</div>
+        <div class="landing-subtitle">a mental math game</div>
         <button class="mode-btn" onclick="window.location.href='basic.html'">Basic Mode</button>
         <button class="mode-btn" onclick="window.location.href='advanced.html'">Applied Mode</button>
         <button class="mode-btn" onclick="window.location.href='analytics.html'">Analytics</button>
@@ -237,7 +241,7 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
       import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-      import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+      import { getFirestore, doc, setDoc, getDoc, collection, getCountFromServer } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
       // Your web app's Firebase configuration
       const firebaseConfig = {
