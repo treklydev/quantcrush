@@ -74,13 +74,19 @@
             color: #ffffff;
         }
 
-        .checkbox-item:hover {
-            background: #222222;
-            border-color: #00cc66;
-        }
-        .checkbox-item:focus {
-            outline: none;
-        }
+        /* For devices that can hover (like desktops) */
+@media (hover: hover) {
+    .checkbox-item:hover {
+        background: #222222;
+        border-color: #00cc66;
+    }
+}
+
+/* For managing focus states cleanly on all devices */
+.checkbox-item:focus {
+    outline: none;
+}
+
         .checkbox-item.selected {
             background: #00331a;
             border-color: #00cc66;
