@@ -1,10 +1,10 @@
 let gameState = {
-    operations: ['addition'],
-    minRange: 1,
-    maxRange: 12,
-    timeLimit: 60,
+    operations: ['addition', 'subtraction', 'multiplication', 'division'],
+    minRange: 2,
+    maxRange: 100,
+    timeLimit: 120, // Default to 2 minutes
     score: 0,
-    timeLeft: 60,
+    timeLeft: 120,
     currentQuestion: {},
     gameTimer: null,
     startTime: null,

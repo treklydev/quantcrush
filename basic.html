@@ -17,6 +17,9 @@
         <main class="main-content">
             <!-- Main game content starts here -->
             <div class="setup-screen active">
+                <div style="margin-bottom: 18px; text-align: left;">
+                    <!-- Standard Mode toggle button removed -->
+                </div>
                     <div class="option-group">
                         <h3>Select Operations:</h3>
                         <div class="checkbox-group operations-center">
@@ -25,15 +28,15 @@
                                 <label for="addition">Addition (+)</label>
                             </div>
                             <div class="checkbox-item" data-operation="subtraction">
-                                <input type="checkbox" id="subtraction">
+                                <input type="checkbox" id="subtraction" checked>
                                 <label for="subtraction">Subtraction (-)</label>
                             </div>
                             <div class="checkbox-item" data-operation="multiplication">
-                                <input type="checkbox" id="multiplication">
+                                <input type="checkbox" id="multiplication" checked>
                                 <label for="multiplication">Multiplication (×)</label>
                             </div>
                             <div class="checkbox-item" data-operation="division">
-                                <input type="checkbox" id="division">
+                                <input type="checkbox" id="division" checked>
                                 <label for="division">Division (÷)</label>
                             </div>
                             <div class="checkbox-item" data-operation="exponents">
@@ -73,12 +76,12 @@
                                 <input type="radio" name="time" id="time30" value="30">
                                 <label for="time30">30s</label>
                             </div>
-                            <div class="radio-item selected" data-time="60">
-                                <input type="radio" name="time" id="time60" value="60" checked>
+                            <div class="radio-item" data-time="60">
+                                <input type="radio" name="time" id="time60" value="60">
                                 <label for="time60">1m</label>
                             </div>
-                            <div class="radio-item" data-time="120">
-                                <input type="radio" name="time" id="time120" value="120">
+                            <div class="radio-item selected" data-time="120">
+                                <input type="radio" name="time" id="time120" value="120" checked>
                                 <label for="time120">2m</label>
                             </div>
                             <div class="radio-item" data-time="300">
@@ -176,54 +179,10 @@
             showSetupScreenOnly();
             updateBackButtonText();
         };
-        // Standard Mode function
-        window.setStandardMode = function() {
-            // Set operations: addition, subtraction, multiplication, division
-            document.getElementById('addition').checked = true;
-            document.getElementById('subtraction').checked = true;
-            document.getElementById('multiplication').checked = true;
-            document.getElementById('division').checked = true;
-            document.getElementById('exponents').checked = false;
-            document.getElementById('percentages').checked = false;
-            
-            // Update visual states
-            document.querySelectorAll('.checkbox-item[data-operation]').forEach(item => {
-                const checkbox = item.querySelector('input');
-                item.classList.toggle('selected', checkbox.checked);
-            });
-            
-            // Set number range (2-100 for standard difficulty)
-            document.getElementById('minRange').value = '2';
-            document.getElementById('maxRange').value = '100';
-            
-            // Disable decimals
-            document.getElementById('includeDecimals').checked = false;
-            document.getElementById('decimalsToggle').classList.remove('selected');
-            
-            // Set time to 2 minutes
-            document.getElementById('time120').checked = true;
-            document.querySelectorAll('.radio-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelector('.radio-item[data-time="120"]').classList.add('selected');
-            
-            // Update game state
-            if (window.gameState) {
-                window.gameState.operations = ['addition', 'subtraction', 'multiplication', 'division'];
-                window.gameState.minRange = 2;
-                window.gameState.maxRange = 100;
-                window.gameState.includeDecimals = false;
-                window.gameState.timeLimit = 120;
-            }
-            
-            // Enable start button
-            document.querySelector('.start-btn').disabled = false;
-            
-
-        };
         
         // On load
         updateBackButtonText();
+
     </script>
     
     <!-- Firebase Modular SDK Initialization -->
