@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantCrush</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Frequently Asked Questions about QuantCrush - a web-based math game to train your brain with basic and applied math challenges.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#00cc66">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3353194681132539"
+     crossorigin="anonymous"></script>
+    <style>
+        .faq-container {
+            background: #111111;
+            border: 1px solid #333333;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0, 123, 255, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            margin: 80px auto;
+            color: #ffffff;
+        }
+        .faq-title {
+            color: #00cc66;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(0, 204, 102, 0.3);
+            text-align: center;
+        }
+        .faq-subtitle {
+            color: #ccc;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .faq-item {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-question {
+            color: #00cc66;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+        .faq-question:hover {
+            color: #00ff88;
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+        .faq-question.active::after {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            color: #ccc;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-top: 10px;
+            display: none;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            border-left: 3px solid #00cc66;
+        }
+        .faq-answer.active {
+            display: block;
+        }
+        .back-btn {
+            background: linear-gradient(45deg, #00cc66, #00994d);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background 0.3s ease;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .back-btn:hover {
+            background: linear-gradient(45deg, #00994d, #00cc66);
+        }
+        .quant-white { color: #fff; }
+        .crush-green { color: #00cc66; }
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <div class="faq-title"><span class="quant-white">Quant</span><span class="crush-green">Crush</span></div>
+        <div class="faq-subtitle">Frequently Asked Questions</div>
+        
+        <div class="faq-item">
+            <div class="faq-question">What is QuantCrush?</div>
+            <div class="faq-answer">
+                QuantCrush is a web-based mental math game designed to train your brain with basic and applied math challenges. It features two modes: Basic Mode for fundamental arithmetic operations and Applied Mode for real-world word problems.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">How do I track my progress?</div>
+            <div class="faq-answer">
+                The Analytics page shows your performance over time, including score progress charts, recent game statistics, and performance breakdown by operation type. You need to be logged in to view your analytics.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Do I need to create an account?</div>
+            <div class="faq-answer">
+                You can play the game without an account, but creating an account allows you to track your progress over time, view detailed analytics, and save your game results for future reference.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Is QuantCrush free to use?</div>
+            <div class="faq-answer">
+                Yes, QuantCrush is completely free to use. There are no hidden fees or premium features - all game modes and analytics are available to everyone.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">What devices can I use?</div>
+            <div class="faq-answer">
+                QuantCrush works on any device with a web browser - desktop computers, laptops, tablets, and smartphones. The interface is responsive and adapts to different screen sizes.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">How can I contact support?</div>
+            <div class="faq-answer">
+                If you have any questions or need help, you can email us at <a href="mailto:quantcrush@gmail.com" style="color: #00cc66;">quantcrush@gmail.com</a>. We're happy to help with any issues or suggestions you might have.
+            </div>
+        </div>
+
+        <button class="back-btn" onclick="window.location.href='index.html'">Back to Home</button>
+    </div>
+
+    <script>
+        // FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isActive = question.classList.contains('active');
+                
+                // Close all other answers
+                document.querySelectorAll('.faq-question').forEach(q => {
+                    q.classList.remove('active');
+                    q.nextElementSibling.classList.remove('active');
+                });
+                
+                // Toggle current answer
+                if (!isActive) {
+                    question.classList.add('active');
+                    answer.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
